@@ -10,7 +10,7 @@ const app = express();
 
 // Middleware
 app.use(cors({
-  origin: "willowy-clafoutis-f7f9e9.netlify.app"
+  origin: "https://your-frontend-url.netlify.app"
 }));
 app.use(express.json());
 
