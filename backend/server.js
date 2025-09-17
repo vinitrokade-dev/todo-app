@@ -9,7 +9,9 @@ dotenv.config();
 const app = express();
 
 // Middleware
-app.use(cors());
+app.use(cors({
+  origin: "willowy-clafoutis-f7f9e9.netlify.app"
+}));
 app.use(express.json());
 
 // Connect Database

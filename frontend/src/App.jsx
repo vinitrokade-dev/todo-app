@@ -9,7 +9,7 @@ function App() {
   const [editingText, setEditingText] = useState("");
 
   // ✅ FIX: API URL updated
-  const API_URL = "http://localhost:4000/api/todos";
+  const API_URL = "willowy-clafoutis-f7f9e9.netlify.app";
 
   // ✅ Fetch todos
   const fetchTodos = () => {
