@@ -8,7 +8,8 @@ function App() {
   const [editingId, setEditingId] = useState(null);
   const [editingText, setEditingText] = useState("");
 
-  const API_URL = "http://localhost:4000/todos";
+  // ✅ FIX: API URL updated
+  const API_URL = "http://localhost:4000/api/todos";
 
   // ✅ Fetch todos
   const fetchTodos = () => {
@@ -51,7 +52,7 @@ function App() {
     setEditingText(text);
   };
 
-  // ✅ Update todo
+  // ✅ Update todo (title)
   const updateTodo = (id) => {
     axios
       .put(`${API_URL}/${id}`, { title: editingText })
@@ -61,6 +62,16 @@ function App() {
         setEditingText("");
       })
       .catch((err) => console.error("Error updating todo:", err));
+  };
+
+  // ✅ Toggle completed
+  const toggleCompleted = (id, completed) => {
+    axios
+      .put(`${API_URL}/${id}`, { completed: !completed })
+      .then((res) => {
+        setTodos(todos.map((t) => (t._id === id ? res.data : t)));
+      })
+      .catch((err) => console.error("Error toggling todo:", err));
   };
 
   return (
@@ -81,7 +92,7 @@ function App() {
       {/* Todo List */}
       <ul className="todo-list">
         {todos.map((todo) => (
-          <li key={todo._id} className="todo-item">
+          <li key={todo._id} className={`todo-item ${todo.completed ? "done" : ""}`}>
             {editingId === todo._id ? (
               <>
                 <input
@@ -94,15 +105,17 @@ function App() {
               </>
             ) : (
               <>
+                <input
+                  type="checkbox"
+                  checked={todo.completed}
+                  onChange={() => toggleCompleted(todo._id, todo.completed)}
+                />
                 <span>{todo.title}</span>
                 <div className="actions">
                   <button onClick={() => startEditing(todo._id, todo.title)}>
                     ✏ Edit
                   </button>
-                  <button
-                    className="delete"
-                    onClick={() => deleteTodo(todo._id)}
-                  >
+                  <button className="delete" onClick={() => deleteTodo(todo._id)}>
                     ✖ Delete
                   </button>
                 </div>

@@ -12,15 +12,23 @@ router.get("/", async (req, res) => {
 // ✅ Add a new todo
 router.post("/", async (req, res) => {
   const { title } = req.body;
+  if (!title) return res.status(400).json({ message: "Title is required" });
+
   const newTodo = new Todo({ title });
   await newTodo.save();
   res.json(newTodo);
 });
 
-// ✅ Toggle completed
+// ✅ Update todo (title or completed)
 router.put("/:id", async (req, res) => {
+  const { title, completed } = req.body;
   const todo = await Todo.findById(req.params.id);
-  todo.completed = !todo.completed;
+
+  if (!todo) return res.status(404).json({ message: "Todo not found" });
+
+  if (title !== undefined) todo.title = title;
+  if (completed !== undefined) todo.completed = completed;
+
   await todo.save();
   res.json(todo);
 });
